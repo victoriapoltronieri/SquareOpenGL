@@ -16,7 +16,9 @@ void keyPress(unsigned char key, int gX, int gY){
    }
    if(key == 's'){
       gY = gY - 150;
+      printf("%d\n", gY);
        printf("oi2\n");
+       printf("%d\n", gY);
    }
    if(key == 'd'){
       gX = gX + 150;
