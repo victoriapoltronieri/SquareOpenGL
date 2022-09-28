@@ -4,29 +4,51 @@
 #include <stdio.h>
 #define TAMANHO_JANELA 500
 
-float gX = 0.0;
-float gY = 0.0;
-int keyStatus[256];
+float gX = 0.0, mouseX = 0;
+float gY = 0.0, mouseY = 0;
+int keyStatus[256] = {0};
+int rightButtonIsPressed = 0;
 
+/*void idle(void){
+    glutPostRedisplay();
+}*/
+
+//Move o quadrado de acordo com o click do mouse
+void move(int x, int y){
+      y = TAMANHO_JANELA - y;
+      gX = (float) x/TAMANHO_JANELA;
+      gY = (float) y/TAMANHO_JANELA;
+      //printf("x: %d  y: %d\n", x, y);
+      glutPostRedisplay();
+}
+
+// Trata os eventos de click de mouse
+void mouse(int button, int state, int x, int y){
+   if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+      //printf("clicou\n");
+      rightButtonIsPressed = 1;
+      move(x,y);
+      
+   }
+   if(button == GLUT_LEFT_BUTTON && state == GLUT_UP){
+     // printf("soltou\n");
+      rightButtonIsPressed = 0;
+   }
+   
+}
+ //Clicar a tecla e segurar, realizar o movimento enquanto a tecla está pressionada
 void idle(void){
-   if(keyStatus[(int)('a')]){
-      gX= gX-0.1;
-      printf("oi1\n");
+   if(keyStatus[(int)('a')] == 1){
+      gX= gX-0.001;
    }
    if(keyStatus[(int)('s')] == 1){
-      gY = gY-0.1;
-      printf("oi2\n");
-
+      gY = gY-0.001;
    }
    if(keyStatus[(int)('d')] == 1){
-     gX= gX+0.1;
-     printf("oi3\n");
-   
+     gX= gX+0.001;
    }
-    if(keyStatus[(int)('w')] == 1){
-      gY = gY+0.1;
-      printf("oi4\n");
-      
+   if(keyStatus[(int)('w')] == 1){
+      gY = gY+0.001;
    }
    glutPostRedisplay();
 }
@@ -39,7 +61,9 @@ void keyPress(unsigned char key, int x, int y){
    keyStatus[(int)(key)] =1;
 }
 
-/*void keyPress(unsigned char key, int x, int y){
+
+/*//Realiza 1 movimento por vez
+void keyPress(unsigned char key, int x, int y){ 
    if(key == 'a'){
       gX= gX-0.01;
    }
@@ -65,10 +89,18 @@ void display(void){
    /* Desenhar um polígono branco (retângulo) */
    glBegin(GL_POLYGON);
 
-      glVertex3f (0.25+gX, 0.25+gY, 0.0); // inf esq
+      /*glVertex3f (0.25+gX, 0.25+gY, 0.0); // inf esq
       glVertex3f (0.75+gX, 0.25+gY, 0.0); // sup esq
       glVertex3f (0.75+gX, 0.75+gY, 0.0); // sup dir
       glVertex3f (0.25+gX, 0.75+gY, 0.0); // inf dir
+      */
+      
+      // Colocando a origem mais próxima do click do mouse
+      glVertex3f (-0.20+gX, -0.20+gY, 0.0); // inf esq
+      glVertex3f (0.2+gX, -0.20+gY, 0.0); // sup esq
+      glVertex3f (0.2+gX, 0.2+gY, 0.0); // sup dir
+      glVertex3f (-0.20+gX, 0.2+gY, 0.0); // inf dir
+
    
    glEnd();
 
@@ -94,9 +126,14 @@ int main(int argc, char** argv){
    glutCreateWindow ("hello world");
    init();
    glutDisplayFunc(display); 
+
    glutKeyboardFunc(keyPress);
+
    glutKeyboardUpFunc(keyUp);
-   idle();
+   glutIdleFunc(idle);
+
+   glutMouseFunc(mouse);
+   glutMotionFunc(move);
       
    glutMainLoop();
 
