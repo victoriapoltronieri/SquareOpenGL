@@ -15,11 +15,13 @@ int rightButtonIsPressed = 0;
 
 //Move o quadrado de acordo com o click do mouse
 void move(int x, int y){
+   if(rightButtonIsPressed){
       y = TAMANHO_JANELA - y;
       gX = (float) x/TAMANHO_JANELA;
       gY = (float) y/TAMANHO_JANELA;
       //printf("x: %d  y: %d\n", x, y);
       glutPostRedisplay();
+   }
 }
 
 // Trata os eventos de click de mouse
@@ -129,7 +131,7 @@ int main(int argc, char** argv){
    glutKeyboardFunc(keyPress);
 
    glutKeyboardUpFunc(keyUp);
-   glutIdleFunc(idle);
+   //glutIdleFunc(idle);
 
    glutMouseFunc(mouse);
    glutMotionFunc(move);
