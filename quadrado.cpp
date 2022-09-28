@@ -27,7 +27,6 @@ void mouse(int button, int state, int x, int y){
    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
       //printf("clicou\n");
       rightButtonIsPressed = 1;
-      move(x,y);
       
    }
    if(button == GLUT_LEFT_BUTTON && state == GLUT_UP){
