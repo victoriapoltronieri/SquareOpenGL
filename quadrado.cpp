@@ -7,7 +7,7 @@
 float gX = 0.0, mouseX = 0;
 float gY = 0.0, mouseY = 0;
 int keyStatus[256] = {0};
-int rightButtonIsPressed = 0;
+int rightButtonIsPressed = 0, isDragging = 0;
 
 /*void idle(void){
     glutPostRedisplay();
@@ -16,6 +16,7 @@ int rightButtonIsPressed = 0;
 //Move o quadrado de acordo com o click do mouse
 void move(int x, int y){
    if(rightButtonIsPressed){
+      isDragging = 1;
       y = TAMANHO_JANELA - y;
       gX = (float) x/TAMANHO_JANELA;
       gY = (float) y/TAMANHO_JANELA;
